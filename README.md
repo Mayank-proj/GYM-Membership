@@ -1,0 +1,1 @@
+This project is a Gym Membership Management System designed to handle the entry of new members. It provides functionality to add, update, and manage member information efficiently. This system is built with ease of use in mind and can be customized to meet the specific needs of a gym.
