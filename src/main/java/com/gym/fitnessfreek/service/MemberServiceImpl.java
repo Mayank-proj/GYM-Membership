@@ -19,7 +19,7 @@ public class MemberServiceImpl implements MemberService {
     public MemberOutputDto getMember(Long id) {
      MemberOutputDto memberOutputDto=new MemberOutputDto();
 
-     Member member= membersRepository.member.get(id);
+     Member member= membersRepository.findById(id).orElse(null);
 
      memberOutputDto.setId(member.getId());
      memberOutputDto.setName(member.getName());
@@ -36,7 +36,7 @@ public class MemberServiceImpl implements MemberService {
     public List<MemberOutputDto> getAllMembers() {
         List<MemberOutputDto> memberOutputDtoList=new ArrayList<>();
 
-        List<Member> memberList=new ArrayList<>(membersRepository.member.values());
+        List<Member> memberList=membersRepository.findAll();
         for(Member member:memberList){
             MemberOutputDto memberOutputDto=new MemberOutputDto();
 
@@ -56,8 +56,8 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberOutputDto addMember(MemberInputDto memberInputDto) {
         Member member= new Member();
-        Long id= ++membersRepository.id;
-        member.setId(id);
+       // Long id= ++membersRepository.id;
+       // member.setId(id);
         member.setName(memberInputDto.getName());
         member.setGender(memberInputDto.getGender());
         member.setPhone(memberInputDto.getPhone());
@@ -65,13 +65,11 @@ public class MemberServiceImpl implements MemberService {
         member.setMembership(memberInputDto.getMembership());
         member.setDob(memberInputDto.getDob());
 
-        membersRepository.member.put(id,member);
-        member=null;
+       member= membersRepository.save(member);
 
-        member=membersRepository.member.get(id);
 
         MemberOutputDto memberOutputDto=new MemberOutputDto();
-        memberOutputDto.setId(member.getId());
+      //  memberOutputDto.setId(member.getId());
         memberOutputDto.setName(member.getName());
         memberOutputDto.setGender(member.getGender());
         memberOutputDto.setPhone(member.getPhone());
@@ -94,13 +92,11 @@ public class MemberServiceImpl implements MemberService {
         member.setMembership(memberInputDto.getMembership());
         member.setDob(memberInputDto.getDob());
 
-        membersRepository.member.put(id,member);
-        member=null;
+        member=membersRepository.save(member);
 
-        member=membersRepository.member.get(id);
 
         MemberOutputDto memberOutputDto=new MemberOutputDto();
-        memberOutputDto.setId(member.getId());
+        //memberOutputDto.setId(member.getId());
         memberOutputDto.setName(member.getName());
         memberOutputDto.setGender(member.getGender());
         memberOutputDto.setPhone(member.getPhone());
@@ -113,8 +109,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public String removedMember(Long id) {
-        String name=membersRepository.member.get(id).getName();
-       membersRepository.member.remove(id);
-       return "Member name" + name + "and their "+ id + " has been removed successfully";
+        String name=membersRepository.findById(id).orElse(null).getName();
+       membersRepository.deleteById(id);
+       return "Member name " + name + "and their id is :  "+ id + "  has been removed successfully";
     }
 }
